@@ -18,5 +18,6 @@ class Game extends Model
         'category3',
         'about',
         'image',
+        //todo platforms
     ];
 }

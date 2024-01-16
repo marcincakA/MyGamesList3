@@ -32,6 +32,7 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
+        //todo strip tags
         $game = Game::create($request->validated());
         return GameResource::make($game);
     }
