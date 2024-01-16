@@ -11,7 +11,8 @@ class UpdateGameRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        //todo uprav
+        return true;
     }
 
     /**

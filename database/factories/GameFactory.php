@@ -17,7 +17,14 @@ class GameFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'developer' => fake()->name(),
+            'publisher' => fake()->name(),
+            'category1' => fake()->word(),
+            'category2' => fake()->word(),
+            'category3' => fake()->word(),
+            'about' => fake()->sentence(),
+            'image' => fake()->imageUrl(),
         ];
     }
 }

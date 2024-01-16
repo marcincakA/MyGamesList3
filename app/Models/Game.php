@@ -10,7 +10,7 @@ class Game extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'name',
         'publisher',
         'developer',
         'category1',

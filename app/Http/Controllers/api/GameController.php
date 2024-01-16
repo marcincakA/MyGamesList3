@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
-use App\Models\Game;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
+use App\Http\Resources\GameResource;
+use App\Models\Game;
+use http\Client\Curl\User;
 
 class GameController extends Controller
 {
@@ -13,7 +16,7 @@ class GameController extends Controller
      */
     public function index()
     {
-        //
+        return GameResource::collection(Game::all());
     }
 
     /**
@@ -29,7 +32,8 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
-        //
+        $game = Game::create($request->validated());
+        return GameResource::make($game);
     }
 
     /**
@@ -37,7 +41,7 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
-        //
+        return GameResource::make($game);
     }
 
     /**
