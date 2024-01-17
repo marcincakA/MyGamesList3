@@ -34,6 +34,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        dd($user);
         return UserResource::make($user);
     }
 

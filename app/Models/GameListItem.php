@@ -8,10 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class GameListItem extends Model
 {
     use HasFactory;
-
     protected $fillable = [
             'game_id',
             'user_id',
             'status'
         ];
+    protected $table = 'gamelistitems';
+    protected $primaryKey = 'id';
+    protected $connection = 'mysql';
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('name', $value)->firstOrFail();
+    }
 }

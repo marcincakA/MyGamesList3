@@ -20,4 +20,6 @@ class Game extends Model
         'image',
         //todo platforms
     ];
+
+    protected $primaryKey = 'game_id';
 }

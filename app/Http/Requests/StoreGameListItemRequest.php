@@ -4,23 +4,22 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class StoreGameListItemRequest extends FormRequest
 {
-    protected function prepareForValidation() : void
-    {
-        $this->merge([
-            'name' => strip_tags($this->input('name')),
-            'email' => strip_tags($this->input('email')),
-            'password' => strip_tags($this->input('password')),
-            'isAdmin' => strip_tags($this->input('isAdmin'))
-        ]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      */
+    protected function prepareForValidation() : void
+    {
+        $this->merge([
+            'game_id' => strip_tags($this->input('game_id')),
+            'user_id' => strip_tags($this->input('user_id')),
+            'status' => strip_tags($this->input('status'))
+        ]);
+    }
     public function authorize(): bool
     {
+        //todo zmen
         return true;
     }
 
@@ -32,9 +31,9 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:users,name',
-            'email' => 'required|string|email',
-            'password' => 'required',
+            'game_id' => 'required',
+            'user_id' => 'required',
+            'status' => 'required|string'
         ];
     }
 }
