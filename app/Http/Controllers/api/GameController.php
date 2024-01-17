@@ -59,7 +59,7 @@ class GameController extends Controller
     public function update(UpdateGameRequest $request, Game $game)
     {
         $game->update($request->validated());
-
+        $game->save();
         return GameResource::make($game);
     }
 
