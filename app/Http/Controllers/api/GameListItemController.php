@@ -7,7 +7,6 @@ use App\Http\Requests\StoreGameListItemRequest;
 use App\Http\Requests\UpdateGameListItemRequest;
 use App\Http\Resources\GameListItemResource;
 use App\Models\GameListItem;
-use http\Env\Request;
 
 class GameListItemController extends Controller
 {

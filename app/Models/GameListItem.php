@@ -17,8 +17,5 @@ class GameListItem extends Model
     protected $primaryKey = 'id';
     protected $connection = 'mysql';
 
-    public function resolveRouteBinding($value, $field = null)
-    {
-        return $this->where('name', $value)->firstOrFail();
-    }
+
 }
