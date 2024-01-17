@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GameListItem extends Model
+class ListItem extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -13,7 +13,7 @@ class GameListItem extends Model
             'user_id',
             'status'
         ];
-    protected $table = 'gamelistitems';
+    protected $table = 'list_items';
     protected $primaryKey = 'id';
     protected $connection = 'mysql';
 

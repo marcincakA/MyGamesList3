@@ -11,20 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gamelistitems', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+
             $table
                 ->foreignId('game_id')
-                ->constrained(table: 'games', column: 'game_id',indexName: 'game_id')
+                ->constrained(table: 'games', column: 'game_id')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table
                 ->foreignId('user_id')
-                ->constrained(table: 'users', column: 'user_id',indexName: 'user_id')
+                ->constrained(table: 'users', column: 'user_id')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table
-                ->string('status');
+            $table->unsignedTinyInteger('rating');
+            $table->text('text');
+
+            $table->unique(['game_id','user_id']);
+
+
             $table->timestamps();
         });
     }
@@ -34,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gamelistitems');
+        Schema::dropIfExists('reviews');
     }
 };

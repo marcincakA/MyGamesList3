@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\GameListItem;
+use App\Models\ListItem;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -38,6 +38,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        //Route::model('gamelistitems', GameListItem::class);
+        //Route::model('gamelistitems', ListItem::class);
     }
 }

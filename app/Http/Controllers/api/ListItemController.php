@@ -5,17 +5,17 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGameListItemRequest;
 use App\Http\Requests\UpdateGameListItemRequest;
-use App\Http\Resources\GameListItemResource;
-use App\Models\GameListItem;
+use App\Http\Resources\ListItemResource;
+use App\Models\ListItem;
 
-class GameListItemController extends Controller
+class ListItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return GameListItemResource::collection(GameListItem::all());
+        return ListItemResource::collection(ListItem::all());
     }
 
     /**
@@ -23,37 +23,37 @@ class GameListItemController extends Controller
      */
     public function store(StoreGameListItemRequest $request)
     {
-        $gl_item = GameListItem::create($request->validated());
+        $gl_item = ListItem::create($request->validated());
         //dd($gl_item);
-        return GameListItemResource::make($gl_item);
+        return ListItemResource::make($gl_item);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(GameListItem $item)
+    public function show(ListItem $item)
     {
         //($gameListItem);
-        return GameListItemResource::make($item);
+        return ListItemResource::make($item);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGameListItemRequest $request, GameListItem $item)
+    public function update(UpdateGameListItemRequest $request, ListItem $item)
     {
         $item->update($request->validated());
-        return GameListItemResource::make($item);
+        return ListItemResource::make($item);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(GameListItem $item)
+    public function destroy(ListItem $item)
     {
         try {
             $item->delete();
-            return GameListItemResource::make($item);
+            return ListItemResource::make($item);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

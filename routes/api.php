@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\api\GameController;
-use App\Http\Controllers\api\GameListItemController;
 use App\Http\Controllers\api\ListItemController;
+use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/games', GameController::class);
 Route::apiResource('/users', UserController::class);
-Route::apiResource('/items', GameListItemController::class);
+Route::apiResource('/items', ListItemController::class);
+Route::apiResource('/reviews', ReviewController::class);
