@@ -31,31 +31,29 @@ class GameListItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(GameListItem $gameListItem)
+    public function show(GameListItem $item)
     {
         //($gameListItem);
-        return GameListItemResource::make($gameListItem);
+        return GameListItemResource::make($item);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGameListItemRequest $request, GameListItem $gameListItem)
+    public function update(UpdateGameListItemRequest $request, GameListItem $item)
     {
-        dd($gameListItem);
-        $gameListItem->update($request->validated());
-        return GameListItemResource::make($gameListItem);
+        $item->update($request->validated());
+        return GameListItemResource::make($item);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(GameListItem $gameListItem)
+    public function destroy(GameListItem $item)
     {
-        dd($gameListItem);
         try {
-            $gameListItem->delete();
-            return GameListItemResource::make($gameListItem);
+            $item->delete();
+            return GameListItemResource::make($item);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
