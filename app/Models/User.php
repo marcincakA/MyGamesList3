@@ -45,4 +45,8 @@ class User extends Authenticatable
     ];
 
     protected $primaryKey = 'user_id';
+
+    public function isAdmin() {
+        return $this.$this->isAdmin();
+    }
 }

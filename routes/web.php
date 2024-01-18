@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserHandlerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/register', [UserHandlerController::class, 'register']);
+Route::post('/logout', [UserHandlerController::class, 'logout']);
+Route::post('/login', [UserHandlerController::class, 'login']);
+Route::get('/editAccount/{userId}', [UserHandlerController::class, 'showEditScreen']);
+Route::put('/editAccount/{userId}', [UserHandlerController::class, 'updateUser']);
+Route::delete('/deleteAccount/{userId}', [UserHandlerController::class, 'deleteUser']);
+
