@@ -58,4 +58,41 @@ class ListItemController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * @param $gameId
+     * @param $userId
+     * @return ListItemResource
+     * najde existujuci zaznam pre daneho hraca a danu hru
+     */
+    public function findListItem($gameId, $userId) {
+        $listItem = ListItem::where([
+            'game_id' => $gameId,
+            'user_id' => $userId,
+        ])->first();
+        if (!$listItem) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+        return ListItemResource::make($listItem);
+    }
+
+    public function findListItemsGameId($gameId) {
+        $listItem = ListItem::where([
+            'game_id' => $gameId,
+        ])->get();
+        if ($listItem->isEmpty()) {
+            return response()->json(['error' => 'Items not found'], 404);
+        }
+        return ListItemResource::collection($listItem);
+    }
+
+    public function findListItemsUserId($userId) {
+        $listItem = ListItem::where([
+            'user_id' => $userId,
+        ])->get();
+        if ($listItem->isEmpty()) {
+            return response()->json(['error' => 'Items not found'], 404);
+        }
+        return ListItemResource::collection($listItem);
+    }
 }

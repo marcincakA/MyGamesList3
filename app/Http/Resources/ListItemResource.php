@@ -17,7 +17,9 @@ class ListItemResource extends JsonResource
         return [
             'id' => $this->id,
             'game_id' => $this->game_id,
+            'game_name' => $this->game->name,
             'user_id' => $this->user_id,
+            'user_name' => $this->user->name,
             'status' => $this->status
         ];
     }

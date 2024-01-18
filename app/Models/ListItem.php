@@ -17,5 +17,11 @@ class ListItem extends Model
     protected $primaryKey = 'id';
     protected $connection = 'mysql';
 
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
+    public function game() {
+        return $this->belongsTo(Game::class, 'game_id');
+    }
 }

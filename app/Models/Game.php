@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\ListItemResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,4 +23,8 @@ class Game extends Model
     ];
 
     protected $primaryKey = 'game_id';
+
+    public function listItems() {
+        return $this->hasMany(ListItem::class);
+    }
 }

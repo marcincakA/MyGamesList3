@@ -20,16 +20,16 @@
             <li>{{$game->category3}}</li>
         </ul>
         <div>
-            <form action="">
+            <form action="" id="addToList">
                 @csrf
-                <select>
+                <select name="status">
                     <option value="Finnished">Finnished</option>
                     <option value="Wish to play">Wish to play</option>
                     <option value="Dropped">Dropped</option>
                     <option value="Playing">Playing</option>
                     <option value="None">None</option>
                 </select>
-                <button type="button" onclick="addToList()">Add to your list</button>
+                <button type="button" onclick="addToGameList()">Add to your list</button>
             </form>
         </div>
     </div>
@@ -59,6 +59,7 @@
     <script>
         const loggedInUserId = {{ auth()->check() ? auth()->user()->getKey() : 'null' }};
         const isAdmin = {{auth()->user()->isAdmin}};
+        const gameId = {{$game->game_id}};
         function submitReviewForm() {
             var form = document.getElementById('reviewForm');
             var formData = new FormData(form);
@@ -156,8 +157,58 @@
         });
     }
 
-    function addToList(){
-
+    function addToGameList(){
+        var form = document.getElementById('addToList');
+        var formData = new FormData(form);
+        var selectedStatus = document.querySelector('select[name="status"]').value;
+        formData.set('user_id', loggedInUserId);
+        formData.set('game_id', gameId);
+        formData.set('status', selectedStatus);
+        if(!recordExists(gameId, loggedInUserId)) {
+            createListItem(form, formData);
+        } else {
+            alert('item already exists');
+        }
+    }
+    function createListItem(form, formData) {
+        fetch('/api/items', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Item created successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error creating list item:', error);
+            });
+    }
+    function recordExists(gameId, userId) {
+        fetch('/api/listItem/find/'+gameId+'/'+userId, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("super");
+            })
+            .then(result => {
+                if(result) {
+                    console.log("superSuper");
+                    return true;
+                } else {
+                    console.log("Nonexist");
+                    return false;
+                }
+            })
+            .catch(error => {
+                console.error("error getting given item", error);
+                return false;
+            })
     }
     </script>
 </body>

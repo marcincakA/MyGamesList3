@@ -63,7 +63,6 @@
         });
     }
     function submitGameDelete(id) {
-        console.log(id);
         fetch('/api/games/' + id, {
                 method: 'DELETE', // Specify the HTTP method
                 headers: {
