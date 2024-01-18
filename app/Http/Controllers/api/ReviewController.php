@@ -17,7 +17,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        return ReviewResource::collection(Review::all());
+        return ReviewResource::collection(Review::with('user')->get());
     }
 
     /**
@@ -53,5 +53,10 @@ class ReviewController extends Controller
     {
         $review->delete();
         return ReviewResource::make($review);
+    }
+
+    public function reviewsForGame($gameId) {
+        $reviews = Review::where('game_id', $gameId)->get();
+        return ReviewResource::collection($reviews);
     }
 }

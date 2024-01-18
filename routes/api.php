@@ -26,3 +26,4 @@ Route::apiResource('/games', GameController::class);
 Route::apiResource('/users', UserController::class);
 Route::apiResource('/items', ListItemController::class);
 Route::apiResource('/reviews', ReviewController::class);
+Route::get('reviews/game/{gameId}', [ReviewController::class, 'reviewsForGame']);

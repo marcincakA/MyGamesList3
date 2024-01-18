@@ -49,4 +49,12 @@ class User extends Authenticatable
     public function isAdmin() {
         return $this.$this->isAdmin();
     }
+
+    public function reviews() {
+        return $this->hasMany(Review::class);
+    }
+
+    public function items() {
+        return $this->hasMany(ListItem::class);
+    }
 }
