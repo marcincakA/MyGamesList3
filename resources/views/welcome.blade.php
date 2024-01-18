@@ -24,7 +24,7 @@
     </form>
     @if(auth()->user()->isAdmin)
         <p>Welcome, admin!</p>
-        <a href="/add_Game">Pridaj Hru</a>
+        <a href="/add_game">Pridaj Hru</a>
     @else
         <p>Welcome, user!</p>
     @endif
