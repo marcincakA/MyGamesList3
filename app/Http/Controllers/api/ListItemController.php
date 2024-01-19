@@ -59,6 +59,26 @@ class ListItemController extends Controller
         }
     }
 
+    public function deleteListItem($gameId, $userId)
+    {
+        try {
+            $listItem = ListItem::where([
+                'game_id' => $gameId,
+                'user_id' => $userId,
+            ])->first();
+
+            if (!$listItem) {
+                return response()->json(['error' => 'Item not found'], 404);
+            }
+
+            $listItem->delete();
+
+            return ListItemResource::make($listItem);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     /**
      * @param $gameId
      * @param $userId

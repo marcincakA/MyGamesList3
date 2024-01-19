@@ -20,17 +20,33 @@
             <li>{{$game->category3}}</li>
         </ul>
         <div>
-            <form action="" id="addToList">
-                @csrf
-                <select name="status">
-                    <option value="Finnished">Finnished</option>
-                    <option value="Wish to play">Wish to play</option>
-                    <option value="Dropped">Dropped</option>
-                    <option value="Playing">Playing</option>
-                    <option value="None">None</option>
-                </select>
-                <button type="button" onclick="addToGameList()">Add to your list</button>
-            </form>
+            @php
+
+                $listItemExists = \App\Models\ListItem::checkListItemExistance($game->game_id, auth()->user()?->getKey());
+            @endphp
+            @if(!$listItemExists)
+                <form action="" id="addToList">
+                    @csrf
+                    <input type="hidden" name="game_id" value="{{ $game->game_id }}">
+                    <input type="hidden" name="user_id" value="{{ auth()->user()?->getKey() }}">
+                    <select name="status">
+                        <option value="Finnished">Finnished</option>
+                        <option value="Wish to play">Wish to play</option>
+                        <option value="Dropped">Dropped</option>
+                        <option value="Playing">Playing</option>
+                    </select>
+                    <button type="button" onclick="addToGameList()">Add to your list</button>
+                </form>
+            @else
+                <form action="" id="removeFromList">
+                    @csrf
+                    <input type="hidden" name="game_id" value="{{ $game->game_id }}">
+                    <input type="hidden" name="user_id" value="{{ auth()->user()?->getKey() }}">
+                    <button type="button" onclick="removeFromList()">Remove</button>
+                </form>
+            @endif
+
+
         </div>
     </div>
     <div>
@@ -58,7 +74,7 @@
 
     <script>
         const loggedInUserId = {{ auth()->check() ? auth()->user()->getKey() : 'null' }};
-        const isAdmin = {{auth()->user()->isAdmin}};
+        const isAdmin = {{auth()->user()?->isAdmin}};
         const gameId = {{$game->game_id}};
         function submitReviewForm() {
             var form = document.getElementById('reviewForm');
@@ -157,59 +173,43 @@
         });
     }
 
-    function addToGameList(){
+    function addToGameList() {
         var form = document.getElementById('addToList');
         var formData = new FormData(form);
-        var selectedStatus = document.querySelector('select[name="status"]').value;
-        formData.set('user_id', loggedInUserId);
-        formData.set('game_id', gameId);
-        formData.set('status', selectedStatus);
-        if(!recordExists(gameId, loggedInUserId)) {
-            createListItem(form, formData);
-        } else {
-            alert('item already exists');
-        }
-    }
-    function createListItem(form, formData) {
-        fetch('/api/items', {
+        fetch('{{url('api/items')}}', {
             method: 'POST',
             body: formData,
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Item created successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error creating list item:', error);
-            });
-    }
-    function recordExists(gameId, userId) {
-        fetch('/api/listItem/find/'+gameId+'/'+userId, {
-            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
         })
             .then(response => response.json())
             .then(data => {
-                console.log("super");
-            })
-            .then(result => {
-                if(result) {
-                    console.log("superSuper");
-                    return true;
-                } else {
-                    console.log("Nonexist");
-                    return false;
-                }
+                location.reload();
+                console.log('succes');
             })
             .catch(error => {
-                console.error("error getting given item", error);
-                return false;
+                console.error("error");
             })
     }
+    function removeFromList() {
+        var form = document.getElementById('removeFromList');
+        fetch(`{{url('api/listItem/delete')}}/${gameId}/${loggedInUserId}`, {
+            method: 'DELETE',
+            headers:{
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                location.reload();
+                console.log('succes');
+            })
+            .catch(error => {
+                console.error("error");
+            })
+    }
+
     </script>
 </body>
 </html>

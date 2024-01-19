@@ -70,6 +70,7 @@
 <a href="/viewGames">View games</a>
 @auth
     <a href="/editAccount/{{auth()->user()->getKey()}}">Edit account</a>
+    <a href="/myList/{{auth()->user()->getKey()}}">My list</a>
 @endauth
 </body>
 </html>

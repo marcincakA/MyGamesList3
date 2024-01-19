@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GameHandlerController;
+use App\Http\Controllers\ListItemHandlerController;
 use App\Http\Controllers\UserHandlerController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,5 @@ Route::put('/edit_game/{game}', [GameHandlerController::class, 'updateGame']);
 Route::get('viewGames/{id}/{title}', [GameHandlerController::class, 'showGamePage']);
 //reviews
 Route::post('/createReview/{game}/{user}', []);
+//mylist
+Route::get('myList/{userId}', [ListItemHandlerController::class, 'showMyList']);

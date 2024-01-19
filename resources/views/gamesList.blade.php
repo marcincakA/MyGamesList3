@@ -13,13 +13,14 @@
 </div>
 
 <script>
-    const isAdmin = {{auth()->user()->isAdmin}};
+    const isAdmin = {{auth()->user() ? auth()->user()->isAdmin : 'false'}};
+
     // Fetch games from the API endpoint
     fetch('/api/games')
         .then(response => response.json())
         .then(data => {
             // Render games on the page
-            renderGames(data.data);
+            renderGames(data.data)
         })
         .catch(error => {
             console.error('Error fetching games:', error);

@@ -30,3 +30,4 @@ Route::get('reviews/game/{gameId}', [ReviewController::class, 'reviewsForGame'])
 Route::get('listItem/find/{gameId}/{userId}', [ListItemController::class, 'findListItem']);
 Route::get('listItem/findGame/{gameId}', [ListItemController::class, 'findListItemsGameId']);
 Route::get('listItem/findUser/{userId}', [ListItemController::class, 'findListItemsUserId']);
+Route::delete('listItem/delete/{gameId}/{userId}', [ListItemController::class, 'deleteListItem']);

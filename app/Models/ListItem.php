@@ -24,4 +24,12 @@ class ListItem extends Model
     public function game() {
         return $this->belongsTo(Game::class, 'game_id');
     }
+
+    public static function checkListItemExistance($gameId, $userId) {
+        return ListItem::where('game_id', $gameId)->where('user_id', $userId)->exists();
+    }
+
+    public static function getListItem($gameId, $userId) {
+        return ListItem::where('game_id', $gameId)->where('user_id', $userId);
+    }
 }
