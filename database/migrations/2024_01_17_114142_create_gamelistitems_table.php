@@ -27,7 +27,7 @@ return new class extends Migration
                 ->string('status');
             $table->timestamps();
 
-            $table->unique('game_id', 'user_id');
+            $table->unique(['game_id', 'user_id']);
         });
     }
 

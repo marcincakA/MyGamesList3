@@ -15,13 +15,14 @@ class UserHandlerController extends Controller
         $incomingFields = $request->validate([
             'name' => ['required', 'min:3', 'max:10', Rule::unique('users', 'name')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'password'=> ['required', 'min:8', 'max:20']
+            'password'=> ['required', 'min:8', 'max:20', 'confirmed']
+
         ]);
+
 
         $incomingFields['name'] = strip_tags($incomingFields['name']);
         $incomingFields['email'] = strip_tags($incomingFields['email']);
         $incomingFields['password'] = strip_tags($incomingFields['password']);
-
         $incomingFields['password'] = bcrypt($incomingFields['password']);
         $user = User::create($incomingFields);
         auth()->login($user);
@@ -47,10 +48,10 @@ class UserHandlerController extends Controller
             'password' => $incomingFields['login_password']
         ])) {
             $request->session()->regenerate();
+            return redirect('/');
         }
 
-        return redirect('/');
-
+        return redirect('/showLogin')->withErrors(['login_failed' => 'Invalid login credentials']);
     }
 
     function showEditScreen($user_id) {

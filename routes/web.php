@@ -23,6 +23,12 @@ Route::get('/', function () {
 //userHandler
 Route::post('/register', [UserHandlerController::class, 'register']);
 Route::post('/logout', [UserHandlerController::class, 'logout']);
+Route::get('/showLogin', function () {
+    return view('login');
+});
+Route::get('/showRegister', function () {
+    return view('register');
+});
 Route::post('/login', [UserHandlerController::class, 'login']);
 Route::get('/editAccount/{userId}', [UserHandlerController::class, 'showEditScreen']);
 Route::put('/editAccount/{userId}', [UserHandlerController::class, 'updateUser']);

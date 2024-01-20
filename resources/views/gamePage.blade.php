@@ -5,9 +5,64 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>{{$game->name}}</title>
 </head>
 <body>
+<header class="bg-white">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">MyGamesList</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/viewGames">Games</a>
+                    </li>
+                    @if(auth()->user())
+                        <li class="nav-item">
+                            <a class="nav-link" href="/myList/{{auth()->user()->getKey()}}">My List</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/editAccount/{{auth()->user()->getKey()}}">Edit account</a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <form action="/logout" method="POST">
+                                            @csrf
+                                            <button>Logout</button>
+                                        </form>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @if(auth()->user()?->isAdmin)
+                            <li class="nav-item">
+                                <a class="nav-link" href="/add_game">Add game</a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignin">Button</button>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Register</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</header>
     <div>
         <h1>{{$game->name}}</h1>
     </div>
@@ -27,10 +82,10 @@
             @if(!$listItemExists)
                 <form action="" id="addToList">
                     @csrf
-                    <input type="hidden" name="game_id" value="{{ $game->game_id }}">
-                    <input type="hidden" name="user_id" value="{{ auth()->user()?->getKey() }}">
+                    <input type="" name="game_id" value="{{ $game->game_id }}">
+                    <input type="" name="user_id" value="{{ auth()->user()?->user_id }}">
                     <select name="status">
-                        <option value="Finnished">Finnished</option>
+                        <option value="Finished">Finished</option>
                         <option value="Wish to play">Wish to play</option>
                         <option value="Dropped">Dropped</option>
                         <option value="Playing">Playing</option>
@@ -41,7 +96,7 @@
                 <form action="" id="removeFromList">
                     @csrf
                     <input type="hidden" name="game_id" value="{{ $game->game_id }}">
-                    <input type="hidden" name="user_id" value="{{ auth()->user()?->getKey() }}">
+                    <input type="hidden" name="user_id" value="{{ auth()->user()?->user_id }}">
                     <button type="button" onclick="removeFromList()">Remove</button>
                 </form>
             @endif

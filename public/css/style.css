@@ -1,0 +1,4 @@
+.form-control::placeholder {
+    color: black; /* Adjust the color to your preference */
+    opacity: 1; /* Ensure full visibility */
+}
