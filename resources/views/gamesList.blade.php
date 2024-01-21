@@ -62,6 +62,9 @@
     </nav>
     <!--navbarend-->
 </header>
+<div class="container-fluid text-center">
+    <h1>Games</h1>
+</div>
 <div id="games-list">
     <!-- Games will be dynamically added here -->
 </div>
@@ -74,12 +77,89 @@
         .then(response => response.json())
         .then(data => {
             // Render games on the page
-            renderGames(data.data)
+            RenderGamesBootstrap(data.data);
         })
         .catch(error => {
             console.error('Error fetching games:', error);
         });
     //New function
+    function RenderGamesBootstrap(games) {
+        const gamesList = document.getElementById('games-list');
+        games.forEach(game => {
+            const containerDiv = document.createElement('div');
+            containerDiv.classList = "container-sm bg-dark bg-opacity-25 mt-2 rounded 3";
+            //row 1
+            const row1 = document.createElement('div');
+            const row1col1 = document.createElement('div');
+            row1col1.classList = "col-sm-12  gy-2 justify-content-center";
+            const h2 = document.createElement('h2');
+            const link = document.createElement('a');
+            link.classList = "link-dark link-underline-opacity-0";
+            link.href = "/viewGames/"+ game.game_id +"/" + game.name;
+            link.textContent = game.name;
+            h2.appendChild(link);
+            row1col1.appendChild(h2);
+            row1.appendChild(row1col1);
+            containerDiv.appendChild(row1);
+            //row 2
+            const row2 = document.createElement('div');
+            row2.classList = "row";
+            const row2col1 = document.createElement('col');
+            const row2col2 = document.createElement('col');
+            row2col1.classList = "col-sm-6";
+            row2col2.classList = "col-sm-6";
+            row2col1.innerHTML = "<strong>Developer:</strong>" + game.developer;
+            row2col2.innerHTML = "<strong>Publisher:</strong>" + game.publisher;
+            row2.appendChild(row2col1);
+            row2.appendChild(row2col2);
+            containerDiv.appendChild(row2);
+            //row 3
+            const row3 = document.createElement('div');
+            row3.classList = "row";
+            const row3col1 = document.createElement('div');
+            const row3col2 = document.createElement('div');
+            const row3col3 = document.createElement('div');
+            row3col1.classList = "col-sm-4";
+            row3col2.classList = "col-sm-4";
+            row3col3.classList = "col-sm-4";
+            row3col1.textContent = game.category1;
+            row3col2.textContent = game.category2;
+            row3col3.textContent = game.category3;
+            row3.appendChild(row3col1);
+            row3.appendChild(row3col2);
+            row3.appendChild(row3col3);
+            containerDiv.appendChild(row3);
+            //admin Row
+            if(isAdmin) {
+                const row4 = document.createElement('div');
+                row4.classList = "row pb-2";
+                const row4col1 = document.createElement('div');
+                row4col1.classList = "col-sm-6 pt-1 pb-1";
+                const editButton = document.createElement('button');
+                editButton.classList = "btn btn-success";
+                editButton.textContent = "Edit";
+                editButton.onclick = function () {
+                    window.location.href = "/edit_game/"+game.game_id;
+                }
+                const row4col2 = document.createElement('div');
+                row4col2.classList = "col-sm-6 pt-1 pb-1";
+                const deleteButton = document.createElement('button');
+                deleteButton.classList = "btn btn-danger";
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener('click', function() {
+                    if (confirmReq()) {
+                        submitGameDelete(`${game.game_id}`);
+                    }
+                });
+                row4col1.appendChild(editButton);
+                row4col2.appendChild(deleteButton);
+                row4.appendChild(row4col1);
+                row4.appendChild(row4col2);
+                containerDiv.appendChild(row4);
+            }
+            gamesList.appendChild(containerDiv);
+        })
+    }
     // Function to render games on the page
     function renderGames(games) {
         const gamesList = document.getElementById('games-list');

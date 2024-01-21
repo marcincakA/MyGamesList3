@@ -61,8 +61,62 @@
             </div>
         </div>
     </nav>
-
 </header>
+<div class="container pb-3">
+    <div class="text-center" id="gameHeader">
+    </div>
+    <div class="img-fluid text-center" id="imageDiv">
+        <img class="img-fluid rounded-3" src="" alt="">
+    </div>
+    <div class="row text-center">
+        <div class="col-sm-6 text-center justify-content-center">
+            <h2 class="">Genre:</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Generate</li>
+                <li class="list-group-item">Generate</li>
+                <li class="list-group-item">Generate</li>
+            </ul>
+        </div>
+        <div class="col-sm-6 text-center justify-content-center">
+            <h2 class="">Info:</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Publisher: Generate</li>
+                <li class="list-group-item">Developer: Generate</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mt-2 text-center">
+            <div class="btn-group">
+                <button  type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Add to your list
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Finnished</a></li>
+                    <li><a class="dropdown-item" href="#">Wish to play</a></li>
+                    <li><a class="dropdown-item" href="#">Dropped</a></li>
+                    <li><a class="dropdown-item" href="#">Playing</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6 mt-2 text-center">
+            <div class="btn">
+                <button class="btn btn-danger">Remove from list</button>
+            </div>
+        </div>
+        <div class="col-sm-6 mt-2 text-center">
+            <div class="btn">
+                <button class="btn btn-success">Write a review</button>
+            </div>
+        </div>
+        <div class="col-sm-12 text-start">
+            <h3>About:</h3>
+        </div>
+        <div class="col">
+            sadfjldsjfklajfl;dsj;kfldjas;kfjsdkjfsdlk;ajflksdjf;lsadjf;ljdslkafjsdlkjfkl;sdj;
+        </div>
+    </div>
+</div>
     <div>
         <h1>{{$game->name}}</h1>
     </div>
@@ -131,6 +185,21 @@
         const loggedInUserId = {{ auth()->check() ? auth()->user()->getKey() : 'null' }};
         const isAdmin = {{auth()->user()?->isAdmin}};
         const gameId = {{$game->game_id}};
+        fetchGame(gameId);
+        checkExistance(gameId,loggedInUserId);
+        function checkExistance(gameId, userId) {
+            fetch(`/api/reviews/findReview/`+gameId+"/"+userId)
+                .then(response => response.json())
+                .then(data => {
+                    const listItemExists = data.exists;
+                    console.log(listItemExists);
+                    // Use listItemExists as needed
+                })
+                .catch(error => {
+                    console.error('Error checking list item:', error);
+                });
+        }
+        fetchReviews();
         function submitReviewForm() {
             var form = document.getElementById('reviewForm');
             var formData = new FormData(form);
@@ -151,22 +220,14 @@
                     alert('Review submitted successfully!');
                     // You can also reset the form if needed
                     form.reset();
+                    fetchReviews();
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
 
-    fetch('{{ url('api/reviews/game/'.$game->game_id) }}',{
-        method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            renderReviews(data.data);
-        })
-        .catch(error => {
-            console.error('Error fetching reviews:')
-        });
+
 
     function renderReviews(reviews) {
         const reviewsDiv = document.getElementById('reviews');
@@ -264,7 +325,46 @@
                 console.error("error");
             })
     }
+    function fetchReviews() {
+        fetch('{{ url('api/reviews/game/'.$game->game_id) }}',{
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                renderReviews(data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching reviews:');
+            });
+    }
 
+    function fetchGame(gameId) {
+        fetch('/api/games/' + gameId, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                renderGame(data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching game');
+            });
+    }
+
+    function renderGame(game) {
+        const headerDiv = document.getElementById('gameHeader');
+        const title = document.createElement('h1');
+        title.textContent = game.name;
+        headerDiv.appendChild(title);
+        const imageDiv = document.getElementById('imageDiv');
+        const image = document.createElement('img');
+        image.src = game.image;
+        image.alt = game.name;
+        image.classList = "img-fluid rounded-3";
+        imageDiv.appendChild(image);
+
+    }
     </script>
 </body>
 </html>

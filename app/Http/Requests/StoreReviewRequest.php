@@ -34,7 +34,7 @@ class StoreReviewRequest extends FormRequest
         return [
             'game_id' => 'required|exists:games,game_id',
             'user_id' => 'required|exists:users,user_id',
-            'rating' => 'required|min:1|max:10',
+            'rating' => 'required|min:1|max:10|integer',
             'text' => 'string|required'
         ];
     }

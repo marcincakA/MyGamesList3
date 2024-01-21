@@ -21,4 +21,11 @@ class Review extends Model
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function game() {
+        return $this->belongsTo(Game::class, 'game_id');
+    }
+
+    public static function checkReviewExistance($gameId, $userId) {
+        return Review::where('game_id', $gameId)->where('user_id', $userId)->exists();
+    }
 }

@@ -59,4 +59,15 @@ class ReviewController extends Controller
         $reviews = Review::where('game_id', $gameId)->get();
         return ReviewResource::collection($reviews);
     }
+
+    /**
+     * @param $gameId
+     * @param $userId
+     * @return
+     * najde existujuci zaznam pre daneho hraca a danu hru
+     */
+    public function findReview($gameId, $userId) {
+        $review = Review::checkReviewExistance($gameId, $userId);
+        return response()->json(['exists' => $review]);
+    }
 }

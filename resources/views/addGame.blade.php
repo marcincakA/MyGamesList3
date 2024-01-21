@@ -62,20 +62,49 @@
         </div>
     </nav>
 </header>
-    <div style="border: 3px solid;">
-        <form action="/addGame" method="POST">
-            @csrf
-            <input name = "name" type="text" placeholder="Game title" required>
-            <input name = "publisher" type="text" placeholder="Publisher" required>
-            <input name = "developer" type="text" placeholder="Developer">
-            <input name = "category1" type="text" placeholder="Category1">
-            <input name = "category2" type="text" placeholder="Category2">
-            <input name = "category3" type="text" placeholder="Category3">
-            <input name = "image" type="text" placeholder="Image">
-            <textarea name="about" type="text" placeholder="nieco o hre" required></textarea>
-            <button>Pridaj hru</button>
-        </form>
-    </div>
+<div class="container-fluid text-center">
+    <h1>Add game</h1>
+</div>
+<div class="container-sm">
+    <form action="/addGame" method ="POST" class="row">
+        @csrf
+        <div class="form-floating mb-3 col-md-12">
+            <input type="text" class="form-control" id="Name" placeholder="name" name = "name" value="{{old('name')}}">
+            <label for="Name">Title</label>
+        </div>
+        <div class="form-floating mb-3 col-md-6">
+            <input type="text" class="form-control" id="Publisher" placeholder="name" name = "publisher" value="{{old('publisher')}}">
+            <label for="Publisher">Publisher</label>
+        </div>
+        <div class="form-floating mb-3 col-md-6">
+            <input type="text" class="form-control" id="Developer" placeholder="name" name = 'developer' value="{{old('developer')}}">
+            <label for="Developer">Developer</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="Category1" placeholder="name" name="category1" value="{{old('category1')}}">
+            <label for="Category1">Category 1</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="Category2" placeholder="name" name="category2" value="{{old('category2')}}">
+            <label for="Category2">Category 2</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="Category3" placeholder="name" name="category3" value="{{old('category3')}}">
+            <label for="Category3">Category 3</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="Image" placeholder="name" name="image" value="{{old('image')}}">
+            <label for="Image">Image link</label>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea type="text" class="form-control" id="About" placeholder="name" style="height: 10vh" name="about">{{old('about')}}</textarea>
+            <label for="About">About</label>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Add game</button>
+        </div>
+    </form>
+</div>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

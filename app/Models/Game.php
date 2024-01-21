@@ -27,4 +27,8 @@ class Game extends Model
     public function listItems() {
         return $this->hasMany(ListItem::class);
     }
+
+    public function reviews() {
+        return $this->hasMany(Review::class, 'game_id');
+    }
 }
