@@ -185,6 +185,7 @@
                 .then(data => {
                     listItemExistsVar = data.exists;
                     console.log("Exists list item: ",listItemExistsVar);
+                    return listItemExistsVar === true;
                     // Use listItemExists as needed
                 })
                 .catch(error => {
@@ -387,7 +388,7 @@
 
         checkItemExistance(game.game_id, loggedInUserId);
         console.log("Exists list item sss: ",listItemExistsVar);
-        if(listItemExistsVar===true) {
+        /*if(checkItemExistance(game.game_id, loggedInUserId)) {
             //delete button
             const buttonRow = document.getElementById('buttonRow');
             const wrapperDiv = document.createElement('div');
@@ -401,7 +402,7 @@
             wrapperDiv.appendChild(innerDiv);
             buttonRow.appendChild(wrapperDiv);
 
-        }
+        }*/
 
     }
     </script>
