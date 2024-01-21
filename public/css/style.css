@@ -2,3 +2,39 @@
     color: black; /* Adjust the color to your preference */
     opacity: 1; /* Ensure full visibility */
 }
+
+#gamePage_gameContainer {
+    background-color: #edf2f7;
+    border-radius: 4vw;
+}
+
+#gamePage_gameContainer h1{
+    font-size: 2rem;
+    font-family: Apple;
+}
+#gamePage_gameContainer h2{
+    font-size: 2rem;
+    font-family: Arial;
+}
+
+#gamePage_gameContainer li{
+    font-family: "Bodoni MT";
+}
+#gamePage_about{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    padding-left: 2vw;
+    padding-right: 3vw;
+}
+
+#gamePage_reviews{
+    margin-top: 3vh;
+    background-color: lightgray;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    border-radius: 2vh;
+}
+
+#gamePage_reviews h3{
+    padding-left: 2vh;
+}

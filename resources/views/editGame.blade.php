@@ -116,32 +116,4 @@
     </div>
 @endif
 </body>
-
-<script>
-    function submitEditGameForm() {
-        var form = document.getElementById('editGameForm');
-        var formData = new FormData(form);
-        console.log('URL:', form.action);
-        console.log('Headers:', {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        });
-        fetch(form.action, {
-            method: 'PUT',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                //location.reload();
-                //alert('succes');
-                console.log('Game updated successfully:', data);
-            })
-            .catch(error => {
-                // Handle error, if needed
-                console.error('Error updating game:', error);
-            });
-    }
-</script>
 </html>

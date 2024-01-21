@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <title>{{$game->name}}</title>
 </head>
 <body>
@@ -66,7 +67,7 @@
         </div>
     </nav>
 </header>
-<div class="container pb-3">
+<div class="container pb-3" id="gamePage_gameContainer">
     <div class="text-center" id="gameHeader">
         <!--generuje obsah z api endpointu-->
     </div>
@@ -111,7 +112,7 @@
                 <button class="btn btn-danger" id="remove_button" onclick="removeFromList({{$game->game_id}}, {{auth()->user()?->user_id}})">Remove from list</button>
             </div>
         </div>
-        <div class="col-sm-12" id = "about">
+        <div class="col-sm-12" id = "gamePage_about">
             <!--generuje obsah z api endpointu-->
         </div>
     </div>
@@ -147,78 +148,35 @@
     </div>
 </div>
 <!--reviews-->
-<div class="container" id="reviews">
+<div class="container" id="gamePage_reviews">
     <div class="text-start">
         <h3>Reviews:</h3>
     </div>
     <!--generovane api endpointom-->
 
+    @if(!$listItemExists)
+        <form type="hidden" action="" id="addToList">
+            @csrf
+            <input type="hidden" name="game_id" value="{{ $game->game_id }}">
+            <input type="hidden" name="user_id" value="{{ auth()->user()?->user_id }}">
+            <select name="status">
+                <option value="Finished">Finished</option>
+                <option value="Wish to play">Wish to play</option>
+                <option value="Dropped">Dropped</option>
+                <option value="Playing">Playing</option>
+            </select>
+            <button type="button" onclick="addToGameList()">Add to your list</button>
+        </form>
+    @else
+        <form action="" id="removeFromList">
+            @csrf
+            <input type="hidden" name="game_id" value="{{ $game->game_id }}">
+            <input type="hidden" name="user_id" value="{{ auth()->user()?->user_id }}">
+            <button type="button" onclick="removeFromList()">Remove</button>
+        </form>
+    @endif
+
 </div>
-
-    <!--old code just in case-->
-    <div hidden="true">
-        <h1 hidden="true">{{$game->name}}</h1>
-    </div>
-    <div hidden="true">
-        <ul> {{--tu treba for loop pre kazdy nenulovy atribut--}}
-            <li>Publisher: {{$game->publisher}}</li>
-            <li>Developer: {{$game->developer}}</li>
-            <li>{{$game->category1}}</li>
-            <li>{{$game->category2}}</li>
-            <li>{{$game->category3}}</li>
-        </ul>
-        <div>
-            @if(!$listItemExists)
-                <form type="hidden" action="" id="addToList">
-                    @csrf
-                    <input type="hidden" name="game_id" value="{{ $game->game_id }}">
-                    <input type="hidden" name="user_id" value="{{ auth()->user()?->user_id }}">
-                    <select name="status">
-                        <option value="Finished">Finished</option>
-                        <option value="Wish to play">Wish to play</option>
-                        <option value="Dropped">Dropped</option>
-                        <option value="Playing">Playing</option>
-                    </select>
-                    <button type="button" onclick="addToGameList()">Add to your list</button>
-                </form>
-            @else
-                <form action="" id="removeFromList">
-                    @csrf
-                    <input type="hidden" name="game_id" value="{{ $game->game_id }}">
-                    <input type="hidden" name="user_id" value="{{ auth()->user()?->user_id }}">
-                    <button type="button" onclick="removeFromList()">Remove</button>
-                </form>
-            @endif
-
-
-        </div>
-    </div>
-    <div hidden="true">
-        <img src="{{$game->image}}">
-    </div>
-    <div hidden="true">
-        {{$game->about}}
-    </div>
-    <div hidden="true">
-        @if(auth()->check())
-            <h2>Write a review</h2>
-            <form id="reviewForm" action="{{ url('api/reviews') }}" method="POST">
-                @csrf
-                <input type="hidden" name="game_id" value="{{ $game->game_id }}">
-                <input type="hidden" name="user_id" value="{{ auth()->user()->getKey() }}">
-                <input name="text" type="text" placeholder="text" required>
-                <input name="rating" type="number" min="1" max="10" placeholder="rating" required>
-                <button type="button" onclick="submitReviewForm()">Submit</button>
-            </form>
-        @endif
-    </div>
-
-
-    <div id = "reviews">
-
-    </div>
-
-
     <script>
         const loggedInUserId = {{ auth()->check() ? auth()->user()->getKey() : 'null' }};
         const isAdmin = {{auth()->user()?->isAdmin ?? 'null'}};
@@ -227,23 +185,23 @@
         var listItemExistsVar = false;
         var reviewIdVar = null;
 
+        //kazdy reload
         fetchGame(gameId);
         fetchReviews();
-        checkReviewExistance(gameId,loggedInUserId);
-        checkItemExistance(gameId, loggedInUserId);
 
+        //nepouzita
         function checkReviewExistance(gameId, userId) {
             fetch(`/api/reviews/findReview/`+gameId+"/"+userId)
                 .then(response => response.json())
                 .then(data => {
                     reviewExistsVar = data.exists;
                     console.log(" review Exists: ",reviewExistsVar);
-                    // Use listItemExists as needed
                 })
                 .catch(error => {
                     console.error('Error checking list item:', error);
                 });
         }
+        //nepouzita
         function checkItemExistance(gameId, userId) {
             fetch(`/api/listItem/find/`+gameId+"/"+userId)
                 .then(response => response.json())
@@ -251,7 +209,6 @@
                     listItemExistsVar = data.exists;
                     console.log("Exists list item: ",listItemExistsVar);
                     return listItemExistsVar === true;
-                    // Use listItemExists as needed
                 })
                 .catch(error => {
                     console.error('Error checking list item:', error);
@@ -283,34 +240,9 @@
                 });
         }
 
-        function submitReviewFormEdit() {
-            console.log('here');
-            //var form = document.getElementById('reviewForm');
-            var form = document.getElementById('modal_review_form');
-            var formData = new FormData(form);
-            var reviewId = parseInt(formData.get("id"));
-            console.log('reviewId', reviewId);
-            fetch(`http://127.0.0.1:8000/api/reviews/${reviewIdVar}`, {
-                method: 'PUT',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    form.reset();
-                    fetchReviews();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
 
         function renderReviewBootstrap(reviews) {
-            const reviewDiv = document.getElementById('reviews');
+            const reviewDiv = document.getElementById('gamePage_reviews');
             reviews.forEach(review => {
                 const divContainer = document.createElement('div');
                 divContainer.classList = "container bg-dark bg-opacity-25 mt-3 rounded-3 mb-3";
@@ -381,61 +313,6 @@
                 reviewDiv.appendChild(divContainer);
             });
 
-        }
-        function setUpModalEdit(review) {
-            console.log('id', review.id);
-            reviewIdVar = review.id;
-            const reviewId = document.getElementById('edit_reviewId');
-            reviewId.value = review.id;
-            const gameId = document.getElementById('edit_GameId');
-            gameId.value = review.game_id;
-            const userId = document.getElementById('edit_UserId');
-            userId.value = review.user_id;
-            const text = document.getElementById('edit_TextId');
-            text.value = review.text;
-            const rating = document.getElementById('edit_Rating');
-            rating.value = review.rating;
-        }
-        function renderReviews(reviews) {
-            const reviewsDiv = document.getElementById('reviews');
-            reviews.forEach(review => {
-                const reviewDiv = document.createElement('div');
-                reviewDiv.style = "background-color: rgb(128,128,128); padding: 10px; margin: 10px;";
-
-                const reviewBy = document.createElement('h4');
-                reviewBy.textContent = `Review by: ${review.user_name}`;
-                const rating = document.createElement('p');
-                rating.textContent = `Rating: ${review.rating}`;
-
-                const text = document.createElement('p');
-                text.textContent = review.text;
-
-                reviewDiv.appendChild(reviewBy);
-                reviewDiv.appendChild(rating);
-                reviewDiv.appendChild(text);
-
-                if (loggedInUserId && review.user_id === loggedInUserId || isAdmin) {
-                    const editButton = document.createElement('button');
-                    editButton.textContent = 'Edit';
-                    editButton.addEventListener('click', () => {
-                        //todo modal
-                        alert('Edit button clicked for review ID: ' + review.id);
-                    });
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    //deleteButton.id = 'deleteButton';
-                    deleteButton.addEventListener('click', () => {
-                        const reviewId = review.id;
-                        deleteReview(reviewId);
-                    });
-
-                    reviewDiv.appendChild(editButton);
-                    reviewDiv.appendChild(deleteButton);
-                }
-
-                reviewsDiv.appendChild(reviewDiv);
-            });
         }
 
         function deleteReview(id) {
@@ -602,7 +479,7 @@
             buttonRow.appendChild(wrapperDiv);
 
         }*/
-        const aboutDiv = document.getElementById('about');
+        const aboutDiv = document.getElementById('gamePage_about');
         aboutDiv.textContent = game.about;
 
     }
