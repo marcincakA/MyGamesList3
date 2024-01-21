@@ -35,6 +35,21 @@
     border-radius: 2vh;
 }
 
+#games-list {
+}
+
 #gamePage_reviews h3{
     padding-left: 2vh;
+}
+
+#myListTable thead{
+    background-color: #4b5563!important;
+}
+#myListHeader h1{
+    font-family: "Bodoni MT";
+}
+
+#tbody{
+    margin-top: 2vh;
+    font-family: "Bodoni MT";
 }
