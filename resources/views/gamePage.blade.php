@@ -71,39 +71,16 @@
     <div class="row text-center">
         <div class="col-sm-6 text-center justify-content-center">
             <h2 class="">Genre:</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Generate</li>
-                <li class="list-group-item">Generate</li>
-                <li class="list-group-item">Generate</li>
+            <ul class="list-group" id = "Genre_group">
             </ul>
         </div>
         <div class="col-sm-6 text-center justify-content-center">
             <h2 class="">Info:</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Publisher: Generate</li>
-                <li class="list-group-item">Developer: Generate</li>
+            <ul class="list-group" id="Info_list">
             </ul>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6 mt-2 text-center">
-            <div class="btn-group">
-                <button  type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Add to your list
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Finnished</a></li>
-                    <li><a class="dropdown-item" href="#">Wish to play</a></li>
-                    <li><a class="dropdown-item" href="#">Dropped</a></li>
-                    <li><a class="dropdown-item" href="#">Playing</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-sm-6 mt-2 text-center">
-            <div class="btn">
-                <button class="btn btn-danger">Remove from list</button>
-            </div>
-        </div>
+    <div class="row" id="buttonRow">
         <div class="col-sm-6 mt-2 text-center">
             <div class="btn">
                 <button class="btn btn-success">Write a review</button>
@@ -185,14 +162,29 @@
         const loggedInUserId = {{ auth()->check() ? auth()->user()->getKey() : 'null' }};
         const isAdmin = {{auth()->user()?->isAdmin}};
         const gameId = {{$game->game_id}};
+        var reviewExistsVar = false;
+        var listItemExistsVar = false;
         fetchGame(gameId);
-        checkExistance(gameId,loggedInUserId);
-        function checkExistance(gameId, userId) {
+        checkReviewExistance(gameId,loggedInUserId);
+        checkItemExistance(gameId, loggedInUserId);
+        function checkReviewExistance(gameId, userId) {
             fetch(`/api/reviews/findReview/`+gameId+"/"+userId)
                 .then(response => response.json())
                 .then(data => {
-                    const listItemExists = data.exists;
-                    console.log(listItemExists);
+                    reviewExistsVar = data.exists;
+                    console.log(" review Exists: ",reviewExistsVar);
+                    // Use listItemExists as needed
+                })
+                .catch(error => {
+                    console.error('Error checking list item:', error);
+                });
+        }
+        function checkItemExistance(gameId, userId) {
+            fetch(`/api/listItem/find/`+gameId+"/"+userId)
+                .then(response => response.json())
+                .then(data => {
+                    listItemExistsVar = data.exists;
+                    console.log("Exists list item: ",listItemExistsVar);
                     // Use listItemExists as needed
                 })
                 .catch(error => {
@@ -308,9 +300,9 @@
                 console.error("error");
             })
     }
-    function removeFromList() {
+    function removeFromList(gameId, userId) {
         var form = document.getElementById('removeFromList');
-        fetch(`{{url('api/listItem/delete')}}/${gameId}/${loggedInUserId}`, {
+        fetch(`{{url('api/listItem/delete')}}/${gameId}/${userId}`, {
             method: 'DELETE',
             headers:{
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -353,16 +345,63 @@
     }
 
     function renderGame(game) {
+        //header
         const headerDiv = document.getElementById('gameHeader');
         const title = document.createElement('h1');
         title.textContent = game.name;
         headerDiv.appendChild(title);
+
+        //image
         const imageDiv = document.getElementById('imageDiv');
         const image = document.createElement('img');
         image.src = game.image;
         image.alt = game.name;
         image.classList = "img-fluid rounded-3";
         imageDiv.appendChild(image);
+
+        //list items - genre
+        const genreList = document.getElementById('Genre_group');
+        const li1 = document.createElement('li');
+        const li2 = document.createElement('li');
+        const li3 = document.createElement('li');
+        li1.classList = "list-group-item";
+        li1.textContent = game.category1;
+        li2.classList = "list-group-item";
+        li2.textContent = game.category2;
+        li3.classList = "list-group-item";
+        li3.textContent = game.category3;
+        genreList.appendChild(li1);
+        genreList.appendChild(li2);
+        genreList.appendChild(li3);
+
+        //list items - info
+        const infoList = document.getElementById('Info_list');
+        const li4 = document.createElement('li');
+        const li5 = document.createElement('li');
+        li4.classList = "list-group-item";
+        li5.classList = "list-group-item";
+        li4.textContent = "Publisher: " + game.publisher;
+        li5.textContent = "Developer: " + game.developer;
+        infoList.appendChild(li4);
+        infoList.appendChild(li5);
+
+        checkItemExistance(game.game_id, loggedInUserId);
+        console.log("Exists list item sss: ",listItemExistsVar);
+        if(listItemExistsVar===true) {
+            //delete button
+            const buttonRow = document.getElementById('buttonRow');
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.classList = "col-sm-6 mt-2 text-center";
+            const innerDiv = document.createElement('div');
+            innerDiv.classList = "btn";
+            const delButton = document.createElement('button');
+            delButton.classList = "btn btn-danger";
+            delButton.textContent = "Remove from list";
+            innerDiv.appendChild(delButton);
+            wrapperDiv.appendChild(innerDiv);
+            buttonRow.appendChild(wrapperDiv);
+
+        }
 
     }
     </script>

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreGameListItemRequest;
 use App\Http\Requests\UpdateGameListItemRequest;
 use App\Http\Resources\ListItemResource;
 use App\Models\ListItem;
+use Termwind\Components\Li;
 
 class ListItemController extends Controller
 {
@@ -85,16 +86,6 @@ class ListItemController extends Controller
      * @return ListItemResource
      * najde existujuci zaznam pre daneho hraca a danu hru
      */
-    public function findListItem($gameId, $userId) {
-        $listItem = ListItem::where([
-            'game_id' => $gameId,
-            'user_id' => $userId,
-        ])->first();
-        if (!$listItem) {
-            return response()->json(['error' => 'Item not found'], 404);
-        }
-        return ListItemResource::make($listItem);
-    }
 
     public function findListItemsGameId($gameId) {
         $listItem = ListItem::where([
@@ -105,7 +96,10 @@ class ListItemController extends Controller
         }
         return ListItemResource::collection($listItem);
     }
-
+    public function existsForUser($gameId, $userId) {
+        $listItem = ListItem::checkListItemExistance($gameId, $userId);
+        return response()->json(['exists' => $listItem]);
+    }
     public function findListItemsUserId($userId) {
         $listItem = ListItem::where([
             'user_id' => $userId,
