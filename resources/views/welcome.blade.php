@@ -83,6 +83,7 @@
         <h2>Welcome, user!</h2>
     @endif
 @else
+    <!--old-->
     <div style="border: 3px solid black;">
         <h2>Register</h2>
         <form id ="registrationForm" action='/register' method="POST">

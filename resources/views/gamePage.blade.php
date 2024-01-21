@@ -55,10 +55,10 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSignin">Button</button>
+                            <a class="nav-link" href="/showLogin">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
+                            <a class="nav-link" href="/showRegister">Register</a>
                         </li>
                     @endif
                 </ul>

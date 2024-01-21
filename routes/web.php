@@ -33,7 +33,6 @@ Route::get('/showRegister', function () {
 Route::post('/login', [UserHandlerController::class, 'login']);
 Route::get('/editAccount/{userId}', [UserHandlerController::class, 'showEditScreen']);
 Route::put('/editAccount/{userId}', [UserHandlerController::class, 'updateUser']);
-Route::get('/editReview/{reviewId}', [ReviewHandlerController::class, 'showReviewEditScreen']);
 Route::delete('/deleteAccount/{userId}', [UserHandlerController::class, 'deleteUser']);
 //gameHandler
 Route::get('/add_game', [GameHandlerController::class, 'redirect_to_addGame']);
@@ -45,5 +44,7 @@ Route::put('/edit_game/{game}', [GameHandlerController::class, 'updateGame']);
 Route::get('viewGames/{id}/{title}', [GameHandlerController::class, 'showGamePage']);
 //reviews
 Route::post('/createReview/{game}/{user}', []);
+Route::get('/editReview/{reviewId}', [ReviewHandlerController::class, 'showReviewEditScreen']);
+Route::put('/editReview/{reviewId}', [ReviewHandlerController::class, 'updateReview']);
 //mylist
 Route::get('myList/{userId}', [ListItemHandlerController::class, 'showMyList']);

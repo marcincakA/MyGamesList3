@@ -51,10 +51,10 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Log in</a>
+                            <a class="nav-link" href="/showLogin">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
+                            <a class="nav-link" href="/showRegister">Register</a>
                         </li>
                     @endif
                 </ul>
@@ -62,21 +62,49 @@
         </div>
     </nav>
 </header>
-<div style="border: 3px solid;">
-    <form action="/edit_game/{{$game->game_id}}" method="POST" id = "editGameForm">
+<div class="container-fluid text-center">
+    <h1>Add game</h1>
+</div>
+<div class="container-sm">
+    <form action="/edit_game/{{$game->game_id}}" method ="POST" class="row">
         @csrf
         @method('PUT')
-        <input name = "name" type="text" placeholder="Game title" value = "{{$game->name}}" required>
-        <input name = "publisher" type="text" placeholder="Publisher" value = "{{$game->publisher}}" required>
-        <input name = "developer" type="text" placeholder="Developer" value = "{{$game->developer}}">
-        <input name = "category1" type="text" placeholder="Category1" value = "{{$game->category1}}">
-        <input name = "category2" type="text" placeholder="Category2" value = "{{$game->category2}}">
-        <input name = "category3" type="text" placeholder="Category3" value = "{{$game->category3}}">
-        <input name = "image" type="text" placeholder="Image" value = "{{$game->image}}">
-        <textarea name="about" type="text" placeholder="nieco o hre" required>{{$game->about}}</textarea> {{--//normalne by som sa zabil za toto velke pismeno na zaciatku 20 min debugu--}}
-        <button type="submit">Uprav hru</button>
+        <div class="form-floating mb-3 col-md-12">
+            <input type="text" class="form-control" id="gameEdit_Name" placeholder="name" name = "name" value="{{$game->name}}">
+            <label for="Name">Title</label>
+        </div>
+        <div class="form-floating mb-3 col-md-6">
+            <input type="text" class="form-control" id="gameEdit_Publisher" placeholder="name" name = "publisher" value="{{$game->publisher}}">
+            <label for="Publisher">Publisher</label>
+        </div>
+        <div class="form-floating mb-3 col-md-6">
+            <input type="text" class="form-control" id="gameEdit_Developer" placeholder="name" name = 'developer' value="{{$game->developer}}">
+            <label for="Developer">Developer</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="gameEdit_Category1" placeholder="name" name="category1" value="{{$game->category1}}">
+            <label for="Category1">Category 1</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="gameEdit_Category2" placeholder="name" name="category2" value="{{$game->category2}}">
+            <label for="Category2">Category 2</label>
+        </div>
+        <div class="form-floating mb-3 col-md-4">
+            <input type="text" class="form-control" id="gameEdit_Category3" placeholder="name" name="category3" value="{{$game->category3}}">
+            <label for="Category3">Category 3</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="gameEdit_Image" placeholder="name" name="image" value="{{$game->image}}">
+            <label for="Image">Image link</label>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea type="text" class="form-control" id="gameEdit_About" placeholder="name" style="height: 10vh" name="about">{{$game->about}}</textarea>
+            <label for="About">About</label>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Add game</button>
+        </div>
     </form>
-    <a href="/back">Back</a>
 </div>
 @if ($errors->any())
     <div class="alert alert-danger">
@@ -86,9 +114,9 @@
             @endforeach
         </ul>
     </div>
-
 @endif
 </body>
+
 <script>
     function submitEditGameForm() {
         var form = document.getElementById('editGameForm');

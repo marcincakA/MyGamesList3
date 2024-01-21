@@ -50,10 +50,10 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Log in</a>
+                            <a class="nav-link" href="/showLogin">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
+                            <a class="nav-link" href="/showRegister">Register</a>
                         </li>
                     @endif
                 </ul>

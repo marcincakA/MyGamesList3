@@ -16,4 +16,26 @@ class ReviewHandlerController extends Controller
         }
         return redirect('/');
     }
+
+    function updateReview($id, Request $request) {
+        //@dd($id);
+
+        $incomingFields = $request->validate([
+            'text' => ['required'],
+            'rating' => ['required'],
+        ]);
+
+        //@dd($incomingFields);
+        foreach ($incomingFields as $key => $value) {
+            $incomingFields[$key] = strip_tags($value);
+        }
+
+        $review = Review::find($id);
+
+        //@dd($user->name);
+        if (auth()->user()?->id == $review->user_id || auth()->user()?->isAdmin) {
+            $review->update($incomingFields);
+            return redirect("/");
+        }
+    }
 }

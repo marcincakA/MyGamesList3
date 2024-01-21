@@ -4,6 +4,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
@@ -51,10 +52,10 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Log in</a>
+                            <a class="nav-link" href="/showLogin">Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Register</a>
+                            <a class="nav-link" href="/showRegister">Register</a>
                         </li>
                     @endif
                 </ul>
@@ -63,23 +64,11 @@
     </nav>
 </header>
 <main class="form-signin w-40 m-auto">
-    <form class="row g-2 justify-content-center" action="/" method="POST">
-        @method('PUT')
+    <form class="row g-2 justify-content-center" id="editReviewForm" action="/editReview/{{$review->id}}" method="POST">
         @csrf
-        <form action="" id="modalEdit_review_form">
-            @csrf
-            <input type="hidden" name="id" value="{{$review->id}}" id="edit_reviewId">
-            <input type="hidden" name="game_id" value="{{$review->game_id}}}" id="edit_GameId">
-            <input type="hidden" name="user_id" value="{{$review->user_id}}" id="edit_UserId">
-            <div class="mb-3">
-                <label for="text" class="form-label">Review text</label>
-                <textarea class="form-control" name="text" id="edit_TextId"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="rating" class="form-label">Rating</label>
-                <input type="number" min="1" max="10" required class="form-control" name="rating" id="edit_Rating">
-            </div>
-        </form>
+        @method('PUT')
+        <input name="game_id" hidden="" value="{{$review->game_id}}">
+        <input name="user_id" hidden="" value="{{$review->user_id}}">
         <div class="col-md-12">
             <div class="row justify-content-center">
                 <div class="col-md-auto">
@@ -91,8 +80,8 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="form-floating">
-                        <input name="text" type="text" class="form-control" id="editText" placeholder="Text" required>
-                        <label for="editText">Name</label>
+                        <textarea class="form-control" id="edit_reviewText" name="text">{{$review->text}}</textarea>
+                        <label for="editText">Text</label>
                     </div>
                 </div>
             </div>
@@ -101,7 +90,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="form-floating">
-                        <input name="rating" type="range" class="form-control" id="floatingInput" placeholder="name@example.com" required value="{{$review->rating}}" min="1" max="10">
+                        <input name="rating" type="number" class="form-control" id="floatingInput" placeholder="name@example.com" required value="{{$review->rating}}" min="1" max="10">
                         <label for="floatingInput">Hodnotenie</label>
                     </div>
                 </div>
