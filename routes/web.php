@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GameHandlerController;
 use App\Http\Controllers\ListItemHandlerController;
+use App\Http\Controllers\ReviewHandlerController;
 use App\Http\Controllers\UserHandlerController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::get('/showRegister', function () {
 Route::post('/login', [UserHandlerController::class, 'login']);
 Route::get('/editAccount/{userId}', [UserHandlerController::class, 'showEditScreen']);
 Route::put('/editAccount/{userId}', [UserHandlerController::class, 'updateUser']);
+Route::get('/editReview/{reviewId}', [ReviewHandlerController::class, 'showReviewEditScreen']);
 Route::delete('/deleteAccount/{userId}', [UserHandlerController::class, 'deleteUser']);
 //gameHandler
 Route::get('/add_game', [GameHandlerController::class, 'redirect_to_addGame']);

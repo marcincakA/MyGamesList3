@@ -69,7 +69,7 @@ class UserHandlerController extends Controller
         $incomingFields = $request->validate([
             'name' => ['required', 'min:3', 'max:10'],
             'email' => ['required', 'email'],
-            'password'=> ['required', 'min:8', 'max:20'],
+            'password'=> ['required', 'min:8', 'max:20', 'confirmed'],
             'isAdmin' => []
         ]);
         $incomingFields['isAdmin'] = $request->has('isAdmin') ? 1 : 0;

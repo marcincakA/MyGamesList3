@@ -63,13 +63,27 @@
     </nav>
 </header>
 <main class="form-signin w-40 m-auto">
-    <form class="row g-2 justify-content-center" action="/editAccount/{{$user->user_id}}" method="POST">
+    <form class="row g-2 justify-content-center" action="/" method="POST">
         @method('PUT')
         @csrf
+        <form action="" id="modalEdit_review_form">
+            @csrf
+            <input type="hidden" name="id" value="{{$review->id}}" id="edit_reviewId">
+            <input type="hidden" name="game_id" value="{{$review->game_id}}}" id="edit_GameId">
+            <input type="hidden" name="user_id" value="{{$review->user_id}}" id="edit_UserId">
+            <div class="mb-3">
+                <label for="text" class="form-label">Review text</label>
+                <textarea class="form-control" name="text" id="edit_TextId"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="number" min="1" max="10" required class="form-control" name="rating" id="edit_Rating">
+            </div>
+        </form>
         <div class="col-md-12">
             <div class="row justify-content-center">
                 <div class="col-md-auto">
-                    <h1 class="h3 mb-3 fw-normal col-md-auto text-center">Create an account</h1>
+                    <h1 class="h3 mb-3 fw-normal col-md-auto text-center">Edit review</h1>
                 </div>
             </div>
         </div>
@@ -77,18 +91,8 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="form-floating">
-                        <input name="name" type="text" class="form-control" id="floatingInputName" placeholder="name" required value="{{$user->name}}">
-                        <label for="floatingInputName">Name</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="row justify-content-center">
-                <div class="col-md-5">
-                    <div class="form-floating">
-                        <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required value="{{$user->email}}">
-                        <label for="floatingInput">Email</label>
+                        <input name="text" type="text" class="form-control" id="editText" placeholder="Text" required>
+                        <label for="editText">Name</label>
                     </div>
                 </div>
             </div>
@@ -97,50 +101,18 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="form-floating">
-                        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required value="{{$user->password}}">
-                        <label for="floatingPassword">Password</label>
+                        <input name="rating" type="range" class="form-control" id="floatingInput" placeholder="name@example.com" required value="{{$review->rating}}" min="1" max="10">
+                        <label for="floatingInput">Hodnotenie</label>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="row justify-content-center">
-                <div class="col-md-5">
-                    <div class="form-floating">
-                        <input name="password_confirmation" type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Password" required value="{{$user->password}}">
-                        <label for="floatingPasswordRepeat">Password repeat</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if(auth()->user()?->isAdmin)
-        <div class="col-md-12">
-            <div class="row justify-content-center">
-                <div class="col-md-5">
-                    <div class="form-check">
-                        <input class="form-check-input" id="isAdminCheckbox" name = "isAdmin" type="checkbox"  {{$user->isAdmin == 1 ? 'checked' : ''}}>
-                        <label for="isAdminCheckbox" class="form-check-label">Is admin</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <button class="btn btn-primary w-100 py-2" type="submit">Edit</button>
             </div>
         </div>
     </form>
-        @if(auth()?->user()->user_id == $user->user_id || auth()?->user()->isAdmin) @endif
-        <div class="row justify-content-center mt-2">
-            <div class="col-md-5">
-                <form action="/deleteAccount/{{$user->user_id}}" method="POST" onsubmit="return confirmAccDel()">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger w-100 py-2" type="submit">Delete</button>
-                </form>
-            </div>
-        </div>
 
 
 
@@ -155,12 +127,3 @@
         </div>
     @endif
 </main>
-    <script>
-        function confirmAccDel() {
-            var yesNo = confirm("Naozaj chces vymazat tento ucet?");
-            return yesNo
-        }
-    </script>
-
-</body>
-</html>
